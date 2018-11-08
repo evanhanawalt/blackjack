@@ -1,3 +1,6 @@
+/**
+ * Game data model
+ */
 let gameStarted = false,
 	gameOver = false,
 	playerWon = false,
@@ -7,15 +10,10 @@ let gameStarted = false,
 	playerHand = [],
 	dealerHand = [];
 
-let startGameButton = document.getElementById('start-game-button');
-let hitButton = document.getElementById('hit-button');
-let stayButton = document.getElementById('stay-button');
-let textArea = document.getElementById('text-area');
-
-
-hitButton.style.display = "none"
-stayButton.style.display = "none"
-
+/**
+ * Model initiator
+ * Add all cards to the deck
+ */
 function createDeck() {
 	let names = ['King', 'Queen', 'Jack', "10", "9", "8", "7", "6", "5", "4", "3", "2", 'Ace']
 	let values = [10, 10, 10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
@@ -36,33 +34,40 @@ function createDeck() {
 	}
 }
 
-function shuffleDeck() {
-	for (let i = 0; i < deck.length; i++) {
-		//console.log(deck[i])
-		let swapId = Math.trunc(Math.random() * deck.length);
-		let tmp = deck[swapId];
-		deck[swapId] = deck[i];
-		deck[i] = tmp;
-	}
-}
 
-function startGame() {
-	gameStarted = true;
-	createDeck()
-	shuffleDeck()
-	for (var i = 0; i < 7; i++) {
-		shuffleDeck()
-	};
-	playerHand = []
-	dealerHand = []
-	playerHand.push(deck.pop())
-	dealerHand.push(deck.pop())
-	playerHand.push(deck.pop())
-	dealerHand.push(deck.pop())
-	console.log("game data initialized")
+/**
+ * View elements
+ */
+let startGameButton = document.getElementById('start-game-button');
+let hitButton = document.getElementById('hit-button');
+let stayButton = document.getElementById('stay-button');
+let textArea = document.getElementById('text-area');
+hitButton.style.display = "none"
+stayButton.style.display = "none"
+/**
+ * Set on click listeners
+ */
+hitButton.addEventListener("click", function () {
+	takeHit()
+	checkForEndOfGame()
+	showGame()
+});
+stayButton.addEventListener("click", function () {
+	endPlayerTurn()
+	showGame()
+});
 
-}
+startGameButton.addEventListener("click", function () {
+	startGame()
+	checkForEndOfGame()
+	showGame()
+});
 
+
+
+/**
+ * View Setter
+ */
 function showGame() {
 
 	updateScores()
@@ -104,6 +109,49 @@ function showGame() {
 		}
 	}
 }
+
+
+// Controller code
+
+
+/**
+ * "Randomize" card order
+ */
+function shuffleDeck() {
+	for (let i = 0; i < deck.length; i++) {
+		//console.log(deck[i])
+		let swapId = Math.trunc(Math.random() * deck.length);
+		let tmp = deck[swapId];
+		deck[swapId] = deck[i];
+		deck[i] = tmp;
+	}
+}
+
+/**
+ * Creates deck, shuffles, and deals cards
+ */
+function startGame() {
+	gameStarted = true;
+	createDeck()
+	shuffleDeck()
+	for (var i = 0; i < 7; i++) {
+		shuffleDeck()
+	};
+	playerHand = []
+	dealerHand = []
+	playerHand.push(deck.pop())
+	dealerHand.push(deck.pop())
+	playerHand.push(deck.pop())
+	dealerHand.push(deck.pop())
+	console.log("game data initialized")
+
+}
+
+
+
+/**
+ * Sets value of playerScore and dealerScore variables
+ */
 function updateScores() {
 	dealerScore = 0
 	let dealerHasAce = false
@@ -138,10 +186,16 @@ function updateScores() {
 	//console.log("scores" + playerScore + '   ' + dealerScore)
 }
 
+/**
+ * Puts next card from deck into player hand
+ */
 function takeHit() {
 	playerHand.push(deck.pop())
 }
 
+/**
+ * Allows dealer to draw cards 0 or more cards until the dealer wins or busts
+ */
 function endPlayerTurn() {
 	updateScores()
 	checkForEndOfGame()
@@ -159,6 +213,9 @@ function endPlayerTurn() {
 	
 }
 
+/**
+ * Checks blackjacks and busts (instant game over) and sets winner in each case
+ */ 
 function checkForEndOfGame() {
 	updateScores()
 	let playerBust =  playerScore > 21
@@ -184,23 +241,11 @@ function checkForEndOfGame() {
 		playerWon = false
 	}
 
+
 }
 
-hitButton.addEventListener("click", function () {
-	takeHit()
-	checkForEndOfGame()
-	showGame()
-});
-stayButton.addEventListener("click", function () {
-	endPlayerTurn()
-	showGame()
-});
 
-startGameButton.addEventListener("click", function () {
-	startGame()
-	checkForEndOfGame()
-	showGame()
-});
+
 
 
 

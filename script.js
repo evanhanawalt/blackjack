@@ -82,19 +82,19 @@ function showGame() {
 
 	textArea.innerText = "player: \n" +
 		playerHandString +
-		 "Score: "  + playerScore + "\n"+
+		"Score: " + playerScore + "\n" +
 		"\ndealer: \n" +
 		dealerHandString +
-		"Score: "  + dealerScore+ "\n";
+		"Score: " + dealerScore + "\n";
 
 
 
-	if(gameOver){
+	if (gameOver) {
 		let winner = 'Dealer'
-		if (playerWon){
+		if (playerWon) {
 			winner = 'Player'
 		}
-		textArea.innerText = textArea.innerText  +  "\n" + winner + ' wins!'
+		textArea.innerText = textArea.innerText + "\n" + winner + ' wins!'
 	}
 
 	// show/hide 'start game' and 'hit'/'stay' buttons
@@ -155,7 +155,7 @@ function startGame() {
 function updateScores() {
 	dealerScore = 0
 	let dealerHasAce = false
-	dealerHand.forEach(function(element) {
+	dealerHand.forEach(function (element) {
 		dealerScore = dealerScore + element.value
 		if (element.value == 1) {
 			dealerHasAce = true
@@ -166,20 +166,20 @@ function updateScores() {
 
 	playerScore = 0
 	let playerHasAce = false
-	playerHand.forEach(function(element) {
+	playerHand.forEach(function (element) {
 		playerScore = playerScore + element.value
-		if (element.value == 1 ) {
+		if (element.value == 1) {
 			playerHasAce = true
 		}
-	//	console.log(element.value)
+		//	console.log(element.value)
 	})
 
 
 
-	if (playerHasAce && (playerScore + 10 <= 21) ){
+	if (playerHasAce && (playerScore + 10 <= 21)) {
 		playerScore = playerScore + 10
 	}
-	if (dealerHasAce && (dealerScore + 10 <= 21) ){
+	if (dealerHasAce && (dealerScore + 10 <= 21)) {
 		dealerScore = dealerScore + 10
 	}
 
@@ -200,43 +200,43 @@ function endPlayerTurn() {
 	updateScores()
 	checkForEndOfGame()
 	// dealer draws until they beat the player, or the player beats them
-	while( !gameOver && (dealerScore < playerScore) ) {
+	while (!gameOver && (dealerScore < playerScore)) {
 		dealerHand.push(deck.pop())
 		updateScores()
 		checkForEndOfGame()
 	}
 
-	if (!gameOver && (dealerScore  >=  playerScore) ){
+	if (!gameOver && (dealerScore >= playerScore)) {
 		gameOver = true
 		playerWon = false
 	}
-	
+
 }
 
 /**
  * Checks blackjacks and busts (instant game over) and sets winner in each case
- */ 
+ */
 function checkForEndOfGame() {
 	updateScores()
-	let playerBust =  playerScore > 21
+	let playerBust = playerScore > 21
 	let dealerBust = dealerScore > 21
-	if (playerBust){
-		console.log("// game over1")
+	if (playerBust) {
+		//console.log("player busts")
 		gameOver = true
 		playerWon = false
 	}
 	if (dealerBust) {
-		console.log("// game over2")
+		//console.log("dealer busts")
 		gameOver = true
 		playerWon = true
 	}
 	if (playerScore == 21) {
-		console.log("// game over3")
+		//console.log("player blackjack")
 		gameOver = true
 		playerWon = true
 	}
 	if (dealerScore == 21) {
-		console.log("// game over4")
+		//console.log("dealer blackjack")
 		gameOver = true
 		playerWon = false
 	}
